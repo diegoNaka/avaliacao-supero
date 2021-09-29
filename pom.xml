@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.supero</groupId>
-  <artifactId>avaliacao-supero</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.supero</groupId>
+	<artifactId>avaliacao-supero</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.7</java.version>
 		<log4j.version>2.6</log4j.version>
@@ -22,22 +23,22 @@
 		<commons.email.version>1.4</commons.email.version>
 		<maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
 	</properties>
-  
-  <dependencies>
-  
+
+	<dependencies>
+
 		<dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.connector.version}</version>
-        </dependency>
-		
-  		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${javax.servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -51,35 +52,35 @@
 			<version>${hibernate.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-envers</artifactId>
-		    <version>${hibernate.version}</version>
-		    <scope>compile</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<version>${hibernate.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
 			<artifactId>weld-servlet</artifactId>
 			<version>${weld.servlet.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>jcifs</groupId>
-		    <artifactId>jcifs</artifactId>
-		    <version>${jcifs.version}</version>
-		    <scope>compile</scope>
+			<groupId>jcifs</groupId>
+			<artifactId>jcifs</artifactId>
+			<version>${jcifs.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-email</artifactId>
-		    <version>${commons.email.version}</version>
-		    <scope>compile</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>${commons.email.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
@@ -107,25 +108,56 @@
 			<version>${jcl-over-slf4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
-  </dependencies>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <warSourceDirectory>WebContent</warSourceDirectory>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+	</dependencies>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<changeLogFile>src/db_scripts/db.changelog.xml</changeLogFile>
+					<driver>com.mysql.jdbc.Driver</driver>
+				</configuration>
+				<executions>
+					<execution>
+						<id>liquibase-install</id>
+						<phase>install</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+						<configuration>
+							<url>jdbc:mysql://127.0.0.1:3306/supero</url>
+							<username>root</username>
+							<password>root</password>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>5.1.6</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>

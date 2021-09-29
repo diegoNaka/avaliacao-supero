@@ -1,0 +1,7 @@
+model\Teste.class
+dao\AgendaDao.class
+dao\ProcedimentoDao.class
+model\Agenda.class
+dao\EntityManagerProducer.class
+controller\AgendaController.class
+model\Procedimento.class
